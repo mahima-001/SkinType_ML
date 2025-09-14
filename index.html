@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkiScan - Skin Type Prediction</title>
+    <!-- Test comment added -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 10%;"><i class="fas fa-leaf"></i></div>
+        <div class="floating-element" style="top: 20%; right: 15%;"><i class="fas fa-spa"></i></div>
+        <div class="floating-element" style="top: 60%; left: 5%;"><i class="fas fa-seedling"></i></div>
+        <div class="floating-element" style="bottom: 20%; right: 10%;"><i class="fas fa-heart"></i></div>
+        <div class="floating-element" style="bottom: 40%; left: 20%;"><i class="fas fa-star"></i></div>
+        <div class="floating-element" style="top: 40%; right: 5%;"><i class="fas fa-sun"></i></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                <span>SkiScan</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" onclick="showPage('home')">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#prediction" class="nav-link" onclick="showPage('prediction')">Skin Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link" onclick="showPage('products')">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" onclick="showPage('about')">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#faq" class="nav-link" onclick="showPage('faq')">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" onclick="showPage('contact')">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>Discover Your Perfect Skin Type</h1>
+                <p>Get personalized skincare recommendations based on advanced machine learning analysis. Transform your skincare routine with precise, data-driven insights tailored just for you.</p>
+                <button class="cta-button" onclick="showPage('prediction')">
+                    <i class="fas fa-search"></i>
+                    Start Your Analysis
+                </button>
+               
+            </div>
+            <div class="hero-image">
+                <div class="skin-types-preview">
+                    <div class="skin-type-card">
+                        <div class="skin-icon normal"></div>
+                        <span>Normal</span>
+                    </div>
+                    <div class="skin-type-card">
+                        <div class="skin-icon dry"></div>
+                        <span>Dry</span>
+                    </div>
+                    <div class="skin-type-card">
+                        <div class="skin-icon oily"></div>
+                        <span>Oily</span>
+                    </div>
+                    <div class="skin-type-card">
+                        <div class="skin-icon sensitive"></div>
+                        <span>Sensitive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h2>Why Choose SkiScan?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Validate-Powered Analysis</h3>
+                    <p>Advanced machine learning algorithms trained on thousands of skin profiles</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Personalized Results</h3>
+                    <p>Get customized skincare recommendations based on your unique characteristics</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Accurate Predictions</h3>
+                    <p>High accuracy rate based on comprehensive data analysis and validation</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Easy to Use</h3>
+                    <p>Simple questionnaire that takes just a few minutes to complete</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction Page -->
+    <div id="prediction" class="page">
+        <div class="prediction-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <div id="questionForm" class="question-form">
+                <h2>Skin Analysis Questionnaire</h2>
+                <p class="question-counter">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></p>
+                
+                <form id="skinAnalysisForm">
+                    <!-- Age Question -->
+                    <div class="question-slide active" data-question="age">
+                        <h3>What's your age?</h3>
+                        <div class="input-group">
+                            <input type="number" id="age" name="age" min="18" max="80" required>
+                            <span class="input-unit">years</span>
+                        </div>
+                    </div>
+
+                    <!-- Gender Question -->
+                    <div class="question-slide" data-question="gender">
+                        <h3>What's your gender?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="gender" value="female" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-female"></i>
+                                Female
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="gender" value="male" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-male"></i>
+                                Male
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Water Intake Question -->
+                    <div class="question-slide" data-question="water">
+                        <h3>How much water do you drink daily?</h3>
+                        <div class="input-group">
+                            <input type="number" id="water_intake" name="water_intake" min="0.5" max="10" step="0.1" required>
+                            <span class="input-unit">liters</span>
+                        </div>
+                    </div>
+
+                    <!-- Weather Question -->
+                    <div class="question-slide" data-question="weather">
+                        <h3>What's the typical weather in your area?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="weather" value="dry" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-sun"></i>
+                                Dry
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="weather" value="cold" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-snowflake"></i>
+                                Cold
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="weather" value="humid" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-cloud-rain"></i>
+                                Humid
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="weather" value="hot" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-thermometer-full"></i>
+                                Hot
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Oiliness Question -->
+                    <div class="question-slide" data-question="oiliness">
+                        <h3>How would you describe your skin's oiliness?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="oiliness" value="low" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-circle"></i>
+                                Low
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="oiliness" value="medium" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-adjust"></i>
+                                Medium
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="oiliness" value="high" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-dot-circle"></i>
+                                High
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Acne Question -->
+                    <div class="question-slide" data-question="acne">
+                        <h3>Do you currently have acne?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="acne" value="yes" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-check"></i>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="acne" value="no" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-times"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Tightness Question -->
+                    <div class="question-slide" data-question="tightness">
+                        <h3>Do you experience tightness after washing your face?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="tightness_after_wash" value="yes" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-check"></i>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tightness_after_wash" value="no" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-times"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Makeup Question -->
+                    <div class="question-slide" data-question="makeup">
+                        <h3>How often do you use makeup?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="makeup_usage" value="never" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-ban"></i>
+                                Never
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="makeup_usage" value="rare" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-calendar"></i>
+                                Rarely
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="makeup_usage" value="frequent" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-calendar-check"></i>
+                                Frequently
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Flaking Question -->
+                    <div class="question-slide" data-question="flaking">
+                        <h3>Do you experience skin flaking?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="flaking" value="yes" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-check"></i>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="flaking" value="no" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-times"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Redness Question -->
+                    <div class="question-slide" data-question="redness">
+                        <h3>Do you experience redness or itchiness?</h3>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="redness_itchiness" value="yes" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-check"></i>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="redness_itchiness" value="no" required>
+                                <span class="radio-custom"></span>
+                                <i class="fas fa-times"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" id="prevBtn" onclick="changeSlide(-1)" disabled>Previous</button>
+                        <button type="button" id="nextBtn" onclick="changeSlide(1)">Next</button>
+                        <button type="submit" id="submitBtn" style="display: none;">Get Results</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results-section" style="display: none;">
+                <div class="results-content">
+                    <div class="result-header">
+                        <i class="fas fa-check-circle"></i>
+                        <h2>Your Skin Type Analysis</h2>
+                    </div>
+                    
+                    <div class="skin-type-result">
+                        <div class="skin-type-icon" id="resultIcon"></div>
+                        <h3 id="skinTypeResult"></h3>
+                        <p id="confidenceScore"></p>
+                    </div>
+
+                    <div class="confidence-breakdown" id="confidenceBreakdown">
+                        <!-- Confidence scores will be populated here -->
+                    </div>
+
+                    <div class="recommendations" id="recommendations">
+                        <!-- Recommendations will be populated here -->
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="primary-btn" onclick="showPage('products')">
+                            <i class="fas fa-shopping-bag"></i>
+                            Shop Products
+                        </button>
+                        <button class="secondary-btn" onclick="resetAnalysis()">
+                            <i class="fas fa-redo"></i>
+                            Take Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products" class="page">
+        <div class="products-container">
+            <h2>Recommended Products by Skin Type</h2>
+            <div class="skin-type-tabs">
+                <button class="tab-btn active" onclick="showProducts('normal')">Normal</button>
+                <button class="tab-btn" onclick="showProducts('dry')">Dry</button>
+                <button class="tab-btn" onclick="showProducts('oily')">Oily</button>
+                <button class="tab-btn" onclick="showProducts('sensitive')">Sensitive</button>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="about-container">
+            <h2>About SkiScan</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>SkiScan is an advanced skin type prediction system that uses machine learning algorithms to analyze your unique skin characteristics and provide personalized skincare recommendations.</p>
+                    
+                    <h3>How It Works</h3>
+                    <div class="process-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Answer Questions</h4>
+                                <p>Complete our comprehensive questionnaire about your skin and lifestyle</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Validate Analysis</h4>
+                                <p>Our Random Forest model analyzes your responses using patterns from 100,000+ skin profiles</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Get Results</h4>
+                                <p>Receive your skin type prediction with confidence scores and personalized recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>The Science Behind It</h3>
+                    <p>Our model is trained on a comprehensive dataset of 100,000 skin profiles, considering factors like age, gender, water intake, weather conditions, oiliness levels, and various skin conditions. The Random Forest algorithm provides high accuracy predictions while explaining the reasoning behind each recommendation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Page -->
+    <div id="faq" class="page">
+        <div class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How accurate is the skin type prediction?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our Validate model achieves high accuracy rates by analyzing patterns from over 100,000 skin profiles. However, results should be considered as guidance and may vary based on individual factors.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Is my personal information safe?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we take privacy seriously. All analysis is done locally in your browser, and no personal information is stored or transmitted to external servers.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Can I retake the analysis?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! You can retake the analysis as many times as you want. We recommend retaking it if your skin conditions change significantly.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Should I consult a dermatologist?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>While our Validate provides valuable insights, it's always recommended to consult with a qualified dermatologist for professional medical advice, especially for serious skin conditions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>What skin types can be detected?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our system can identify four main skin types: Normal, Dry, Oily, and Sensitive. Each comes with specific care recommendations and product suggestions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>support@skincareai.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Address</h3>
+                            <p>123 Beauty Street, Skincare City, SC 12345</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="contact-form">
+                    <h3>Send us a Message</h3>
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <select name="subject" required>
+                            <option value="">Select Subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="business">Business Partnership</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>SkiScan</span>
+                </div>
+                <p>Discover your skin type with Validate-powered analysis</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#prediction" onclick="showPage('prediction')">Skin Analysis</a></li>
+                    <li><a href="#about" onclick="showPage('about')">About</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SkiScan. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
