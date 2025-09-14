@@ -96,5 +96,5 @@ This project is for educational and demonstration purposes.
 
 ---
 
-## 👩‍💻 Author
-- Built by Mahima Tripathi(and GitHub Copilot)
+- Built by Mahima Tripathi
+
